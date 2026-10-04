@@ -38,3 +38,11 @@ Pantau rencana dan milestone terkini:
 ---
 
 **Versi:** v1.0.0 | **Status:** Disetujui | **Terakhir diupdate:** 2026-10-04
+
+
+## Jalur Segmen Operasional
+
+- [metrik](./metrik/)
+- [preferensi](./preferensi/)
+- [produk](./produk/)
+- [resep](./resep/)
