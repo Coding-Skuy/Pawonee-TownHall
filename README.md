@@ -1,55 +1,44 @@
-# Pawonee-TownHall — AI Cooking Assistant Grade-2
+> Versi: v1.0.0 | Status: disetujui | Menggantikan: -
 
-> Varian 1 · Bahasa: Indonesia · Status: disahkan TownHall.
-> Peran: mengubah hortikultura grade-2 (cacat visual, ukuran tidak standar, surplus cepat layu) menjadi hidangan bernilai melalui rekomendasi resep berbasis stok nyata.
+# Pawonee-TownHall — Divisi AI Cooking PT ChefGenie
 
-## 1. Peran dalam ekosistem ChefGenie
+## Peran Pawonee
 
-- **Pawonee (repo ini)**: otak resep dan rekomendasi. Menyimpan bank 24 resep, standar porsi, model keluarga, mesin rekomendasi, dan aplikasi mobile + web.
-- **Pedaree (inventori)**: sumber stok rumah tangga. Pawonee membaca `StokItem` Pedaree dan tidak menduplikasi pencatatan stok. Repo: `https://github.com/Coding-Skuy/Pedaree-TownHall` (modul `inventori/`, endpoint `GET /stok`).
-- **Lumbung (agregasi grade-2)**: sumber pasokan dan harga grade-2 hari ini. Pawonee memakai daftar dan harga Lumbung untuk menghitung belanja tambahan. Repo: `https://github.com/Coding-Skuy/Lumbung-TownHall` (modul `agregasi/`, daftar harga G2).
+Pawonee adalah divisi AI Cooking PT ChefGenie: mengubah hortikultura grade-2 (cacat visual, ukuran tidak standar, surplus cepat layu) menjadi hidangan bernilai melalui rekomendasi resep berbasis stok nyata. Bank inti: 12 resep grade-2 di `pawonee-ai-models` (`models/bank_resep_grade2.json`), dievaluasi 12/12 lolos. Modul bersama `:shared:pantry-resep` adalah milik Pawonee (sumber: `pawonee-app-kmp/shared/pantry-resep`); repo lain dan Pedaree hanya mengonsumsi. Basis data: DB `pawonee` (Postgres). Autentikasi: JWT akses 15 menit ditambah refresh 7 hari dengan audiens `pawonee`, ditambah API key perangkat dan service key antar layanan. Sinyal lintas divisi: topik `sinyal.pedaree.v1` yang diproduksi `pawonee-data-pipeline` untuk dikonsumsi Pedaree.
 
-Aliran data: `Lumbung agregasi G2 → Pedaree inventori rumah → Pawonee rekomendasi resep → dapur keluarga → metrik serapan`.
+## Peta Versi Aktif
 
-## 2. Peta folder
+- Versi aktif: v1.0.0 (disetujui). Isi beku ada di `versions/v1.0.0/`.
+- `versions/v1.0.0/CHANGELOG.md` — ringkasan versi awal.
+- `versions/v1.0.0/BRD/` — kebutuhan bisnis BR-001 dan seterusnya.
+- `versions/v1.0.0/PRD/` — pengguna dan kriteria US-001 dan seterusnya.
+- `versions/v1.0.0/FRD/` — kebutuhan fungsional FR-001 dan seterusnya.
+- `versions/v1.0.0/FSD/` — rancangan alur, model data Resep, ProfilKeluarga, StokItem, Rekomendasi, dan kontrak API.
+- `versions/v1.0.0/SNAPSHOT-ROADMAP.md` — salinan beku janji v1.0.0.
+- Peta hidup lintas versi ada di `roadmap/`: `TIMELINE.md`, `MILESTONE.md`, `ROADMAP.md`.
 
-```
-Pawonee-TownHall/
-  README.md
-  resep/
-    10-bank-resep-grade2.md   # 24 resep R-01–R-24 + substitusi
-    20-standar-porsi.md       # dasar 4 jiwa + faktor 1–8 jiwa
-  preferensi/
-    10-model-keluarga.md      # profil, alergi, pantangan, budget, alat
-  produk/
-    10-alur-rekomendasi.md    # 5 tahap filter → skor → ranking
-    20-kontrak-api-KMP-mobile.md  # antarmuka Kotlin + REST mobile
-    21-kontrak-api-web-bun.md     # endpoint Bun/SvelteKit
-    30-modul-KMP-bersama.md   # modul :shared:pantry-resep (milik bersama Pedaree)
-  platform/
-    10-matriks-KMP-web.md     # pembagian logika KMP vs web
-    20-navigasi3.md           # 6 layar Navigation3 + deep link
-    40-mobile-KMP.md          # aplikasi utama KMP + Compose
-    50-web-bun-svelte.md      # web pendamping Bun + SvelteKit
-  metrik/
-    10-serapan-waste.md       # serapan ≥1500 g, rasio ≥80%, waste ≤300 g per minggu
-```
+## Cara Baca History
 
-## 3. Stack terkunci
+1. Mulai dari `versions/v1.0.0/CHANGELOG.md` untuk ringkasan versi.
+2. Lanjut ke `versions/v1.0.0/BRD/00-ikhtisar.md` untuk konteks bisnis, lalu `PRD/10-pengguna.md` untuk peran.
+3. Untuk janji waktu itu, baca `versions/v1.0.0/SNAPSHOT-ROADMAP.md` yang sudah dibekukan dan tidak diubah lagi.
+4. Untuk kondisi terkini lintas versi, baca `roadmap/TIMELINE.md` dan `roadmap/MILESTONE.md`.
+5. Riwayat perubahan antar versi dilacak lewat `git log` dan `CHANGELOG.md` tiap versi. File lama sengaja dipindah dengan `git mv` agar tidak ada dua sumber kebenaran.
 
-- **Mobile utama**: Kotlin Multiplatform (Kotlin 2.1.20) + Compose Multiplatform 1.7.3 + Navigation3 1.0.0 (Android `minSdk 26`, iOS 16+). Logika luring penuh via modul `pantry-resep`.
-- **Web pendamping**: Bun 1.4.3 + Svelte 5.28 + SvelteKit 2.20 + TypeScript 5.9.2 + Zod 3.23.8 + Postgres 16.
-- **Berbagi dengan Pedaree**: modul KMP `:shared:pantry-resep` (`id.chefgenie.pawonee.pantryresep`); model `StokItem` dipakai ulang dari Pedaree; uji paritas 32 kasus Kotlin ↔ TypeScript.
+## TownHall Lain dan Pedoman Induk
 
-## 4. Mulai cepat
+Pedoman induk: https://github.com/Coding-Skuy/ChefGenie-TownHall.
 
-1. Baca berurutan: `resep/10-bank-resep-grade2.md` → `resep/20-standar-porsi.md` → `preferensi/10-model-keluarga.md` → `produk/10-alur-rekomendasi.md`.
-2. Implementasi mobile: `produk/30-modul-KMP-bersama.md` + `platform/40-mobile-KMP.md` + `platform/20-navigasi3.md`.
-3. Implementasi web: `produk/21-kontrak-api-web-bun.md` + `platform/50-web-bun-svelte.md`, patuhi `platform/10-matriks-KMP-web.md`.
-4. Ukur dampak: `metrik/10-serapan-waste.md`.
+Pola yang ditiru persis dari template emas https://github.com/Coding-Skuy/Lumbung-TownHall: penamaan `versions/vX.Y.Z/BRD|PRD|FRD|FSD/`, file `NN-nama-kebab.md`, header versi satu baris, dan bagian Batasan di tiap file.
 
-## 5. Tautan
+Lima TownHall lain yang memakai pola yang sama:
 
-- Pedaree inventori (stok): `https://github.com/Coding-Skuy/Pedaree-TownHall`
-- Lumbung agregasi grade-2 (pasokan + harga): `https://github.com/Coding-Skuy/Lumbung-TownHall`
-- API produksi: `https://api.pawonee.chefgenie.id/v1` · Web: `https://pawonee.chefgenie.id` · Deep link: `pawonee://resep/{id}?jiwa=4`
+- https://github.com/Coding-Skuy/Lumbung-TownHall — agregasi dan pasokan grade-2, sumber harga Pawonee.
+- https://github.com/Coding-Skuy/Pasaree-TownHall — pasar dan penjualan.
+- https://github.com/Coding-Skuy/Pedaree-TownHall — inventori rumah dan konsumen sinyal Pawonee.
+- https://github.com/Coding-Skuy/TitipO-TownHall — titip dan kemitraan.
+- https://github.com/Coding-Skuy/Titeny-TownHall — ketelitian dan audit mutu.
+
+## Batasan
+
+Batasan ruang lingkup repo ini: hanya bank 12 resep grade-2, standar porsi, model keluarga dan preferensi, alur rekomendasi, modul `:shared:pantry-resep` milik Pawonee, kontrak API Pawonee, dan metrik serapan. Di luar batas: pencatatan stok inventori milik Pedaree, agregasi panen dan papan harga milik Lumbung, harga ecer pasar milik Pasaree, routing last-mile milik Pedaree, skema titip milik TitipO, dan audit independen milik Titeny.
