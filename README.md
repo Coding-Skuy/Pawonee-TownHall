@@ -2,6 +2,9 @@
 
 > Selamat datang, Pengelana. Anda berada di jantung dokumentasi Pawonee.
 > Pilih jalan Anda untuk memahami ekosistem ChefGenie.
+>
+> **Tautan ke visi:** Pawonee adalah nilai visi ChefGenie — 12 resep inti
+> mengubah grade-2 jadi hidangan. Lihat [VISI-MISI](../../VISI-MISI.md).
 
 ---
 
